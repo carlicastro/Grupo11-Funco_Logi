@@ -1,6 +1,6 @@
 package modelo
 
-sealed trait Termino
+trait Termino
 
 case class Variable(nombre: String) extends Termino
 
