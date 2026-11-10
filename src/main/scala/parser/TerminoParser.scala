@@ -17,8 +17,8 @@ object TerminoParser {
     else if(limpio.head.isUpper || limpio.head == '_'){
       Variable(limpio)
     }
-    else if( limpio.contains("(") && limpio.contains(")")){
-      PredicadoParser.parsear(limpio)
+    else if ( limpio.contains("(") &&  limpio.endsWith(")") ){
+        PredicadoParser.parsear(limpio)
     }
     else{
       Atomo(limpio)
