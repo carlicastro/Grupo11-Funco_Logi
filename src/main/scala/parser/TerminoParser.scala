@@ -14,8 +14,11 @@ object TerminoParser {
     else if(limpio.toIntOption.isDefined){
       Numero(limpio.toInt)
     }
-    else if(limpio.head.isUpper){
+    else if(limpio.head.isUpper || limpio.head == '_'){
       Variable(limpio)
+    }
+    else if ( limpio.contains("(") &&  limpio.endsWith(")") ){
+        PredicadoParser.parsear(limpio)
     }
     else{
       Atomo(limpio)
