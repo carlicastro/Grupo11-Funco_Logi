@@ -46,7 +46,13 @@ object ClausulaParser {
       val condiciones = separarCondiciones(textoCuerpo)
 
       val cuerpo = condiciones.map(condicion =>
-        if (condicion.contains("=")){
+        if (condicion == "false") {
+          Predicado("false", List())
+        }
+        else if (condicion =="true") {
+          Predicado("true", List())
+        }
+        else if (condicion.contains("=")){
           val partes =condicion.split("=",2)
           val parteIzquierda = TerminoParser.parsear(partes(0).trim)
           val parteDerecha = TerminoParser.parsear(partes(1).trim)

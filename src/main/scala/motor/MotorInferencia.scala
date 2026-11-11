@@ -42,7 +42,13 @@ object MotorInferencia {
       case objetivo :: resto =>
         val objetivoAplicado = sigma.aplicar(objetivo)
 
-        if (objetivoAplicado.nombre == "=" && objetivoAplicado.argumentos.length == 2){
+        if (objetivoAplicado.nombre == "false" && objetivo.argumentos.isEmpty) {
+          List()
+        }
+        else if (objetivoAplicado.nombre == "true" && objetivo.argumentos.isEmpty) {
+          resolverObjetivos(resto, programa, sigma)
+        }
+        else if (objetivoAplicado.nombre == "=" && objetivoAplicado.argumentos.length == 2){
           val parteIzquierda = objetivoAplicado.argumentos.head
           val parteDerecha = objetivoAplicado.argumentos(1)
 
