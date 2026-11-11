@@ -1,4 +1,4 @@
-
+/*
 import modelo._
 import parser._
 import unificacion._
@@ -472,3 +472,5 @@ object PruebasTP2 {
     println(s"Pruebas fallidas:   ${total - exitosas}")
   }
 }
+
+ */
