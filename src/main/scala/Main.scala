@@ -1,3 +1,8 @@
+import modelo.Variable
+import motor.MotorInferencia
+import parser.*
+import unificacion.Sustitucion
+
 object Main {
   def main(args: Array[String]): Unit = {
     if (args.length < 2) {
@@ -36,8 +41,30 @@ object Main {
   }
 
   def procesarConsulta(consulta: String, conocimiento: List[String]): String = {
-    // Esta función debe implementar la lógica del TP.
-    // Debe devolver "false", "true" o "true [(X=valor;...),...]" según el enunciado.
-    "false"
+    val programa = ProgramaParser.parsear(conocimiento)
+    val consultaParseada = ConsultaParser.parsear(consulta)
+    val variables: List[String] = FormatoSalida.obtenerVariables(consultaParseada)
+    val resultados: List[Sustitucion] = MotorInferencia.resolver(consultaParseada, programa)
+    (variables, resultados) match{
+      case (_, Nil) =>
+        "false"
+      case (Nil, _) =>
+        "true"
+      case (_, _) =>
+        val solucionesFormateadas =
+          resultados.map { sigma =>
+            
+             val asignaciones = 
+               variables.map { nombre =>
+                 
+                 val valor = 
+                   sigma.aplicar(Variable(nombre))
+                   
+                 s"$nombre=${FormatoSalida.mostrarTermino(valor)}"
+               }
+             "(" + asignaciones.mkString(";") + ")"
+          }
+        "true [" + solucionesFormateadas.mkString(",") + "]"
+     }
   }
 }
