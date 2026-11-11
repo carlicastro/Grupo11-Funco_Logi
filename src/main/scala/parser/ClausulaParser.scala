@@ -1,6 +1,6 @@
 package parser
 
-import modelo.Clausula
+import modelo.{Clausula, Predicado}
 
 object ClausulaParser {
 
@@ -45,9 +45,16 @@ object ClausulaParser {
       val cabeza = PredicadoParser.parsear(textoCabeza)
       val condiciones = separarCondiciones(textoCuerpo)
 
-      val cuerpo = condiciones.map{condicion =>
-        PredicadoParser.parsear(condicion)
-      }
+      val cuerpo = condiciones.map(condicion =>
+        if (condicion.contains("=")){
+          val partes =condicion.split("=",2)
+          val parteIzquierda = TerminoParser.parsear(partes(0).trim)
+          val parteDerecha = TerminoParser.parsear(partes(1).trim)
+          Predicado("=", List(parteIzquierda,parteDerecha))
+        } else {
+          PredicadoParser.parsear(condicion)
+        }
+      )
 
       Clausula(cabeza, cuerpo)
 

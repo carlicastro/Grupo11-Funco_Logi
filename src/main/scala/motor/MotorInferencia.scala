@@ -42,7 +42,37 @@ object MotorInferencia {
       case objetivo :: resto =>
         val objetivoAplicado = sigma.aplicar(objetivo)
 
-        if (esBuiltIn(objetivoAplicado)) {
+        if (objetivoAplicado.nombre == "=" && objetivoAplicado.argumentos.length == 2){
+          val parteIzquierda = objetivoAplicado.argumentos.head
+          val parteDerecha = objetivoAplicado.argumentos(1)
+
+          parteDerecha match{
+            case p: Predicado if esBuiltIn(p) =>
+              Operaciones.evaluar(p) match {
+                case Right(resultado) =>
+                  Unificador.unificarTerminos(parteIzquierda,resultado,sigma) match {
+                    case Some(nuevaSigma) =>
+                      resolverObjetivos(resto,programa, nuevaSigma)
+
+                    case None =>
+                      List()
+                  }
+
+                case Left(_) =>
+                  List()
+              }
+            case _ =>
+              Unificador.unificarTerminos(parteIzquierda, parteDerecha, sigma) match{
+                case Some(nuevaSigma) =>
+                  resolverObjetivos(resto, programa, nuevaSigma)
+
+                case None =>
+                  List()
+              }
+          }
+        }
+
+        else if (esBuiltIn(objetivoAplicado)) {
           Operaciones.evaluar(objetivoAplicado) match {
             case Right(Atomo("true")) =>
               resolverObjetivos(resto, programa, sigma)
