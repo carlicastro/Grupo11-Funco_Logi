@@ -9,4 +9,6 @@ lazy val root = (project in file("."))
     // cuando se usa `sbt run < entrada.txt`, el script Bash o terminales/IDE tipo IntelliJ/WSL.
     Compile / run / fork := true,
     Compile / run / connectInput := true,
+    Test / run / fork := true,
+    Test / test := (Test / runMain).toTask(" PruebasTP2").value
   )

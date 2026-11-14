@@ -1,4 +1,3 @@
-/*
 import modelo._
 import parser._
 import unificacion._
@@ -466,11 +465,51 @@ object PruebasTP2 {
       assert(resultado.isLeft)
     }
 
+    // 7. PRUEBA CON BASE DE CONOCIMIENTOS Y CONSULTAS
+    println("\n--- 7. BASE DE CONOCIMIENTOS Y CONSULTAS ---")
+
+    val programaVehiculos = Programa(
+      List(
+        Clausula(Predicado("vehiculo", List(Atomo("auto"))), List()),
+        Clausula(Predicado("vehiculo", List(Atomo("bicicleta"))), List()),
+        Clausula(Predicado("vehiculo", List(Atomo("moto"))), List()),
+        Clausula(Predicado("tieneMotor", List(Atomo("auto"))), List()),
+        Clausula(Predicado("tieneMotor", List(Atomo("moto"))), List()),
+        Clausula(
+          Predicado("vehiculoConMotor", List(Variable("X"))),
+          List(
+            Predicado("vehiculo", List(Variable("X"))),
+            Predicado("tieneMotor", List(Variable("X")))
+          )
+        )
+      )
+    )
+
+    probar("Auto es un vehiculo con motor") {
+      val consulta = Predicado("vehiculoConMotor", List(Atomo("auto")))
+      val resultados = MotorInferencia.resolver(consulta, programaVehiculos)
+
+      assert(resultados.nonEmpty)
+    }
+
+    probar("Obtener todos los vehiculos con motor") {
+      val consulta = Predicado("vehiculoConMotor", List(Variable("X")))
+      val resultados = MotorInferencia.resolver(consulta, programaVehiculos)
+
+      val valores = resultados.map(_.aplicar(Variable("X"))).toSet
+      assert(valores == Set(Atomo("auto"), Atomo("moto")))
+    }
+    
+    probar("Bicicleta no es un vehiculo con motor") {
+      val consulta = Predicado("vehiculoConMotor", List(Atomo("bicicleta")))
+      val resultados = MotorInferencia.resolver(consulta, programaVehiculos)
+
+      assert(resultados.isEmpty)
+    }
+
     println("\n--- RESULTADO FINAL ---")
     println(s"Pruebas ejecutadas: $total")
     println(s"Pruebas exitosas:   $exitosas")
     println(s"Pruebas fallidas:   ${total - exitosas}")
   }
 }
-
- */
