@@ -8,6 +8,22 @@ Repositorio mínimo para el motor lógico inspirado en Prolog del TP2. El progra
 - Java compatible con Scala 3
 - Unix/macOS o entorno con `bash` para `./test_runner.sh`
 
+## Cómo instalar los requisitos
+Para instalar sbt se deberán correr los siguientes comandos:
+
+```bash
+curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo gpg --dearmor -o /etc/apt/keyrings/scalasbt.gpg
+echo "deb [signed-by=/etc/apt/keyrings/scalasbt.gpg] https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+sudo apt-get update
+sudo apt-get install sbt
+```
+
+Luego, para instalar una version de Java compatible con Scala, ejecutar:
+
+```bash
+sudo apt-get install openjdk-21-jdk
+```
+
 ## Estructura del proyecto
 
 ```
@@ -59,7 +75,14 @@ chmod +x test_runner.sh
 ./test_runner.sh
 ```
 
-El script compila con `sbt compile`, ejecuta `sbt "run ejemplos/programas/<caso>.pl ejemplos/inputs/<caso>.txt"` para cada caso y compara la salida (filtrando los logs de sbt) con `ejemplos/outputs/<caso>.res`.
+El script compila con sbt compile, ejecuta sbt "run ejemplos/programas/<caso>.pl ejemplos/inputs/<caso>.txt" para cada caso y compara la salida (filtrando los logs de sbt) con ejemplos/outputs/<caso>.res.
+
+## Cómo correr nuestras pruebas
+Desde la raiz del proyecto, se debe ejecutar:
+
+```bash
+sbt test
+```
 
 ## Formato de los archivos de ejemplo
 
