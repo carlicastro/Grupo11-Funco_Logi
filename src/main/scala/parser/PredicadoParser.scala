@@ -60,14 +60,16 @@ object PredicadoParser {
 
     val contenido = limpio.substring(posicionParentesis + 1, limpio.length - 1)
 
-    val argumentos =
-      if (contenido.trim.isEmpty) {
-        List()
-      }
-      else {
-        separarArgumentos(contenido)
+    val argumentos = {
+      contenido.trim match {
+        case "" =>
+          List()
+
+        case _ =>
+          separarArgumentos(contenido)
           .map(argumento => TerminoParser.parsear(argumento))
       }
+    }
 
     Predicado(nombre, argumentos)
   }

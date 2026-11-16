@@ -17,15 +17,20 @@ object ClausulaParser {
         dentroDeTexto = !dentroDeTexto
       }
       else if (!dentroDeTexto) {
-        if (caracter == '(') {
-          profundidad += 1
-        }
-        else if (caracter == ')') {
-          profundidad -= 1
-        }
-        else if (caracter == ',' && profundidad == 0) {
-          resultado = resultado :+ texto.substring(inicio, i).trim
-          inicio = i + 1
+
+        caracter match {
+
+          case '(' =>
+            profundidad += 1
+
+          case ')' =>
+            profundidad -= 1
+
+          case ',' if profundidad == 0 =>
+            resultado = resultado :+ texto.substring(inicio, i).trim
+            inicio = i + 1
+
+          case _ =>
         }
       }
     }
@@ -45,22 +50,22 @@ object ClausulaParser {
       val cabeza = PredicadoParser.parsear(textoCabeza)
       val condiciones = separarCondiciones(textoCuerpo)
 
-      val cuerpo = condiciones.map(condicion =>
-        if (condicion == "false") {
+      val cuerpo = condiciones.map {
+        case "false" =>
           Predicado("false", List())
-        }
-        else if (condicion =="true") {
+
+        case "true" =>
           Predicado("true", List())
-        }
-        else if (condicion.contains("=")){
-          val partes =condicion.split("=",2)
+
+        case condicion if condicion.contains("=") =>
+          val partes = condicion.split("=", 2)
           val parteIzquierda = TerminoParser.parsear(partes(0).trim)
           val parteDerecha = TerminoParser.parsear(partes(1).trim)
-          Predicado("=", List(parteIzquierda,parteDerecha))
-        } else {
+          Predicado("=", List(parteIzquierda, parteDerecha))
+
+        case condicion =>
           PredicadoParser.parsear(condicion)
-        }
-      )
+      }
 
       Clausula(cabeza, cuerpo)
 
