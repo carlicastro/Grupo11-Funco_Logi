@@ -59,6 +59,13 @@ chmod +x test_runner.sh
 ./test_runner.sh
 ```
 
+## Cómo correr nuestras pruebas
+Desde la raiz del proyecto, se debe ejecutar:
+
+```bash
+sbt test
+```
+
 El script compila con `sbt compile`, ejecuta `sbt "run ejemplos/programas/<caso>.pl ejemplos/inputs/<caso>.txt"` para cada caso y compara la salida (filtrando los logs de sbt) con `ejemplos/outputs/<caso>.res`.
 
 ## Formato de los archivos de ejemplo
